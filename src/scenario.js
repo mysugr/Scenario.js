@@ -3,6 +3,7 @@
     "use strict";
 
     var Namespace = "Scenario";
+    var CookieName = "ScenarioJS";
 
     var Tester = Tester || function (scenarioOpts) {
 
@@ -51,6 +52,18 @@
                     }
                 }
                 return toChoose[Math.floor(Math.random() * toChoose.length)];
+            },
+            getCookieData: function() {
+                var cookieData = $.cookie(CookieName);
+                if (typeof cookieData === "string") {
+                    cookieData = JSON.parse(cookieData);
+                } else {
+                    cookieData = {};
+                }
+                return cookieData;
+            },
+            setCookieData: function(cookieData) {
+                $.cookie(CookieName, JSON.stringify(cookieData));
             }
         };
 
@@ -76,7 +89,17 @@
 
         self.go = function() {
 
-            var chosenTestIndex = utils.chooseWeightedItem();
+            // check if test was already executed
+            var cookieData = utils.getCookieData();
+            var chosenTestIndex,
+                scenarioSlug = utils.toSlug(scenarioOpts.name);
+            if (typeof cookieData[scenarioSlug] !== "undefined") {
+                chosenTestIndex = cookieData[scenarioSlug];
+            } else {
+                chosenTestIndex = utils.chooseWeightedItem();
+                cookieData[scenarioSlug] = chosenTestIndex;
+            }
+
             var test = self.tests[scenarioOpts.name][chosenTestIndex];
 
             d.body.className += " "+test.className;
@@ -94,6 +117,8 @@
                     odds: Math.floor( (test.weight/self.cache.totalWeights) * 100)
                 });
             }
+
+            utils.setCookieData(cookieData);
             return this;
         };
 
