@@ -4,6 +4,7 @@
 
     var Namespace = "Scenario";
     var CookieName = "ScenarioJS";
+    var ClassPrefix = "scenariojs";
 
     var Tester = Tester || function (scenarioOpts) {
 
@@ -125,8 +126,10 @@
             }
 
             var test = self.tests[scenarioOpts.name][chosenTestIndex];
-
-            d.body.className += " "+test.className;
+            var removeRegex = new RegExp("(^|\\s)" + ClassPrefix + "-" + scenarioSlug + "-\\S+", "g");
+            $('body').removeClass(function(index, css) {
+                return (css.match(removeRegex) || []).join(' ');
+            }).addClass(ClassPrefix + "-" + scenarioSlug + "-" + test.className);
 
             self.cache.ranTests[scenarioOpts.name] = test.name;
 
