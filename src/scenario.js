@@ -87,6 +87,26 @@
             return this;
         };
 
+        self.onRoute = function(opts) {
+
+            if (typeof opts.route === 'string') {
+                if (location.hash === opts.route) {
+                    setTimeout(function() {
+                        self.go();
+                    }, 0);
+                }
+                window.onhashchange = function() {
+                    console.log("hash changed: " + location.hash);
+                    if (location.hash === opts.route) {
+                        setTimeout(function() {
+                            self.go();
+                        }, 0);
+                    }
+                };
+            }
+
+        };
+
         self.go = function() {
 
             // check if test was already executed
