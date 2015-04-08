@@ -109,7 +109,21 @@
                     }
                 };
             }
+            return this;
+        };
 
+        self.completeOnRoute = function(opts) {
+            if (typeof opts.route === 'string') {
+                window.onhashchange = function() {
+                    console.log("hash changed: " + location.hash);
+                    if (location.hash === opts.route) {
+                        setTimeout(function() {
+                            self.complete();
+                        }, 0);
+                    }
+                };
+            }
+            return this;
         };
 
         self.go = function() {
