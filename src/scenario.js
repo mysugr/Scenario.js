@@ -94,15 +94,15 @@
 
         self.onRoute = function(opts) {
 
-            if (typeof opts.route === 'string') {
-                if (location.hash === opts.route) {
+            if (opts.route instanceof RegExp) {
+                if (location.hash.match(opts.route)) {
                     setTimeout(function() {
                         self.go();
                     }, 0);
                 }
                 window.onhashchange = function() {
                     console.log("hash changed: " + location.hash);
-                    if (location.hash === opts.route) {
+                    if (location.hash.match(opts.route)) {
                         setTimeout(function() {
                             self.go();
                         }, 0);
@@ -113,10 +113,10 @@
         };
 
         self.completeOnRoute = function(opts) {
-            if (typeof opts.route === 'string') {
+            if (opts.route instanceof RegExp) {
                 window.onhashchange = function() {
                     console.log("hash changed: " + location.hash);
-                    if (location.hash === opts.route) {
+                    if (location.hash.match(opts.route)) {
                         setTimeout(function() {
                             self.complete();
                         }, 0);
