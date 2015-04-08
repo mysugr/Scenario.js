@@ -13,6 +13,10 @@
             }
         };
 
+        if (typeof scenarioOpts.useCookie === 'undefined') {
+            scenarioOpts.useCookie = true;
+        }
+
         var self = this;
         var utils;
 
@@ -113,7 +117,7 @@
             var cookieData = utils.getCookieData();
             var chosenTestIndex,
                 scenarioSlug = utils.toSlug(scenarioOpts.name);
-            if (typeof cookieData[scenarioSlug] !== "undefined") {
+            if (scenarioOpts.useCookie && typeof cookieData[scenarioSlug] !== "undefined") {
                 chosenTestIndex = cookieData[scenarioSlug];
             } else {
                 chosenTestIndex = utils.chooseWeightedItem();
